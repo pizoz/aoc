@@ -41,10 +41,9 @@ function solve(matrix) {
     let count = 0;
     let guardPosition = findGuard(matrix);
     
-    printMatrix(matrix);
     for (let i = 0; i < matrix.length; i++) {
         for (let j = 0; j < matrix[i].length; j++) {
-            if (matrix[i][j] == ".") {
+            if (matrix[i][j] == "."  ) {
                 let matrixCopy = JSON.parse(JSON.stringify(matrix));
                 matrixCopy[i][j] = "#";
                 if (navigateMatrix(matrixCopy, guardPosition)) {
@@ -78,41 +77,53 @@ function walk(matrix) {
         guardPosition = nextPosition;
 
     }
-    console.log("Last position: ", guardPosition);
-    printMatrix(matrix);
     return matrix;
 }
 
 function navigateMatrix(matrix, guardPosition) {
     let direction = [-1, 0];
     let visitedDirections = new Set();
-    let inALoop = false;
+    let hitWalls = new Set();
     while (isValidPosition(matrix, guardPosition[0], guardPosition[1])) {
 
         matrix[guardPosition[0]][guardPosition[1]] = "^";
-        const tuple = JSON.stringify([guardPosition, direction]);
-        if (visitedDirections.has(tuple)) {
-            console.log(tuple);
-            inALoop = true;
-            break;
-        }
-        visitedDirections.add(tuple);
+        // const tuple = JSON.stringify([guardPosition, direction]);
+        // if (visitedDirections.has(tuple)) {
+        //     return true;
+        // }
+        // visitedDirections.add(tuple);
         matrix[guardPosition[0]][guardPosition[1]] = "X";
         let nextPosition = [guardPosition[0] + direction[0], guardPosition[1] + direction[1]];
         
         if (isValidPosition(matrix, nextPosition[0], nextPosition[1]) && matrix[nextPosition[0]][nextPosition[1]] == "#") {
+            const secondTuple = JSON.stringify([nextPosition, direction]);
+            if (hitWalls.has(secondTuple)) {
+                return true;
+            }
+            hitWalls.add(secondTuple);
             direction = rotate90deg(direction);
             nextPosition = [guardPosition[0] + direction[0], guardPosition[1] + direction[1]];
+            if (matrix[nextPosition[0]][nextPosition[1]] == "#") {
+                continue;
+            }
         }
         guardPosition = nextPosition;
     }
 
-    return inALoop;
+    return false;
 }
 function printMatrix(matrix) {
     for (let i = 0; i < matrix.length; i++) {
         console.log(i)
-        console.log(matrix[i].join(' '));
+        console.log(matrix[i].le)
+        console.log(matrix[i].join(''));
     }
 }
-console.log(solve(matrix));
+const result = solve(matrix);
+console.log("Mia risposta: ", result);
+console.log("Risposta corretta: 1586");
+if (result === 1586) {
+    console.log("Test passed");
+} else {
+    console.log("Test failed");
+}

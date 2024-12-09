@@ -57,7 +57,6 @@ function solve(matrix) {
         if (isValidPosition(matrix, nextPosition[0], nextPosition[1]) && matrix[nextPosition[0]][nextPosition[1]] == "#") {
             // se la prossima casella è un muro, cambio direzione
             direction = rotate90deg(direction);
-            console.log(direction)
             nextPosition = [guardPosition[0] + direction[0], guardPosition[1] + direction[1]];
         }
         
